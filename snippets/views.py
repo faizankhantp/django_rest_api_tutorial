@@ -1,5 +1,3 @@
-from requests import Response
-from rest_framework.decorators import api_view
 from snippets.models import Snippet
 from snippets.permissions import IsOwnerOrReadOnly
 from snippets.serializers import SnippetSerializer
@@ -31,15 +29,3 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-@api_view(['POST'])
-def create_auth(request):
-    serialized = UserSerializer(data=request.DATA)
-    if serialized.is_valid():
-        User.objects.create_user(
-            serialized.init_data['email'],
-            serialized.init_data['username'],
-            serialized.init_data['password']
-        )
-        return Response(serialized.data)
-    else:
-        return Response(serialized._errors)
